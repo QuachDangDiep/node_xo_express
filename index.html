@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f4f7;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        #message {
+            font-size: 18px;
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        #board {
+            display: grid;
+            grid-template-columns: repeat(3, 120px);
+            grid-template-rows: repeat(3, 120px);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .cell {
+            width: 120px;
+            height: 120px;
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            color: #333;
+            border: 2px solid #ddd;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .cell:hover {
+            background-color: #f0f0f0;
+        }
+
+        .cell:active {
+            background-color: #ccc;
+        }
+
+        .cell.x {
+            color: #ff4500; /* Bright red for X */
+        }
+
+        .cell.o {
+            color: #1e90ff; /* Dodger blue for O */
+        }
+
+        #reset {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #ff4c4c;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        #reset:hover {
+            background-color: #ff3a3a;
+        }
+
+        @media (max-width: 600px) {
+            #board {
+                grid-template-columns: repeat(3, 80px);
+                grid-template-rows: repeat(3, 80px);
+            }
+
+            .cell {
+                width: 80px;
+                height: 80px;
+                font-size: 28px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            #message {
+                font-size: 16px;
+            }
+
+            #reset {
+                padding: 8px 16px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Tic-Tac-Toe Game</h1>
+    <div id="message"></div>
+    <div id="board">
+        <div class="cell" data-index="0"></div>
+        <div class="cell" data-index="1"></div>
+        <div class="cell" data-index="2"></div>
+        <div class="cell" data-index="3"></div>
+        <div class="cell" data-index="4"></div>
+        <div class="cell" data-index="5"></div>
+        <div class="cell" data-index="6"></div>
+        <div class="cell" data-index="7"></div>
+        <div class="cell" data-index="8"></div>
+    </div>
+    <button id="reset">Reset</button>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const cells = document.querySelectorAll('.cell');
+        const message = document.getElementById('message');
+
+        let player = null;
+
+        socket.on('player-assign', (assignedPlayer) => {
+            player = assignedPlayer;
+            message.innerText = `You are Player ${player}`;
+        });
+
+        socket.on('game-full', () => {
+            message.innerText = 'Game is full. Please wait for the next game.';
+        });
+
+        socket.on('board-update', (board) => {
+            board.forEach((mark, index) => {
+                cells[index].innerText = mark || ''; // Update cell with 'X', 'O', or empty
+                if (mark === 'X') {
+                    cells[index].classList.add('x');
+                } else if (mark === 'O') {
+                    cells[index].classList.add('o');
+                } else {
+                    cells[index].classList.remove('x', 'o');
+                }
+            });
+        });
+
+        // Listen for game-over message from server
+        socket.on('game-over', ({ winner }) => {
+            message.innerText = winner ? `Player ${winner} wins!` : "It's a draw!";
+        });
+
+        cells.forEach(cell => {
+            cell.addEventListener('click', () => {
+                const index = cell.getAttribute('data-index');
+                socket.emit('make-move', index); // Send move to server
+            });
+        });
+
+        // Handle resetting the board
+        document.getElementById('reset').addEventListener('click', () => {
+            socket.emit('clear-board'); // Send clear board request to server
+            resetBoard(); // Reset the board visually
+        });
+
+        function resetBoard() {
+            cells.forEach(cell => {
+                cell.innerText = ''; // Clear all cells
+                cell.classList.remove('x', 'o'); // Remove class for styling
+            });
+            message.innerText = ''; // Clear message on reset
+        }
+
+        socket.on('player-disconnect', () => {
+            // Handle player disconnection if needed
+        });
+    </script>
+</body>
+</html>
