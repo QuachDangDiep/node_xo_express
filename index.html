@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tic Tac Toe</title>
+    <title>Tic-Tac-Toe 6x6</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -27,17 +27,18 @@
             margin-bottom: 10px;
         }
 
+        /* Update grid to 6x6 */
         #board {
             display: grid;
-            grid-template-columns: repeat(3, 120px);
-            grid-template-rows: repeat(3, 120px);
+            grid-template-columns: repeat(6, 100px);
+            grid-template-rows: repeat(6, 100px);
             gap: 10px;
             margin-bottom: 20px;
         }
 
         .cell {
-            width: 120px;
-            height: 120px;
+            width: 100px;
+            height: 100px;
             background-color: white;
             display: flex;
             align-items: center;
@@ -82,14 +83,14 @@
 
         @media (max-width: 600px) {
             #board {
-                grid-template-columns: repeat(3, 80px);
-                grid-template-rows: repeat(3, 80px);
+                grid-template-columns: repeat(6, 60px);
+                grid-template-rows: repeat(6, 60px);
             }
 
             .cell {
-                width: 80px;
-                height: 80px;
-                font-size: 28px;
+                width: 60px;
+                height: 60px;
+                font-size: 24px;
             }
 
             h1 {
@@ -108,9 +109,10 @@
     </style>
 </head>
 <body>
-    <h1>Tic-Tac-Toe Game</h1>
+    <h1>Tic-Tac-Toe 6x6</h1>
     <div id="message"></div>
     <div id="board">
+        <!-- Create 36 cells for 6x6 board -->
         <div class="cell" data-index="0"></div>
         <div class="cell" data-index="1"></div>
         <div class="cell" data-index="2"></div>
@@ -120,6 +122,33 @@
         <div class="cell" data-index="6"></div>
         <div class="cell" data-index="7"></div>
         <div class="cell" data-index="8"></div>
+        <div class="cell" data-index="9"></div>
+        <div class="cell" data-index="10"></div>
+        <div class="cell" data-index="11"></div>
+        <div class="cell" data-index="12"></div>
+        <div class="cell" data-index="13"></div>
+        <div class="cell" data-index="14"></div>
+        <div class="cell" data-index="15"></div>
+        <div class="cell" data-index="16"></div>
+        <div class="cell" data-index="17"></div>
+        <div class="cell" data-index="18"></div>
+        <div class="cell" data-index="19"></div>
+        <div class="cell" data-index="20"></div>
+        <div class="cell" data-index="21"></div>
+        <div class="cell" data-index="22"></div>
+        <div class="cell" data-index="23"></div>
+        <div class="cell" data-index="24"></div>
+        <div class="cell" data-index="25"></div>
+        <div class="cell" data-index="26"></div>
+        <div class="cell" data-index="27"></div>
+        <div class="cell" data-index="28"></div>
+        <div class="cell" data-index="29"></div>
+        <div class="cell" data-index="30"></div>
+        <div class="cell" data-index="31"></div>
+        <div class="cell" data-index="32"></div>
+        <div class="cell" data-index="33"></div>
+        <div class="cell" data-index="34"></div>
+        <div class="cell" data-index="35"></div>
     </div>
     <button id="reset">Reset</button>
 

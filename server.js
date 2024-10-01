@@ -15,21 +15,57 @@ app.get('/', (req, res) => {
 });
 
 // Check winning combinations
-const checkWinner = (board) => {
-    const winningCombinations = [
-        [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
-        [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
-        [0, 4, 8], [2, 4, 6]            // Diagonals
+function checkWinner(board) {
+    const winConditions = [
+        // Rows (5 in a row)
+        [0, 1, 2, 3, 4],
+        [1, 2, 3, 4, 5],
+        [6, 7, 8, 9, 10],
+        [7, 8, 9, 10, 11],
+        [12, 13, 14, 15, 16],
+        [13, 14, 15, 16, 17],
+        [18, 19, 20, 21, 22],
+        [19, 20, 21, 22, 23],
+        [24, 25, 26, 27, 28],
+        [25, 26, 27, 28, 29],
+        [30, 31, 32, 33, 34],
+        [31, 32, 33, 34, 35],
+
+        // Columns (5 in a column)
+        [0, 6, 12, 18, 24],
+        [6, 12, 18, 24, 30],
+        [1, 7, 13, 19, 25],
+        [7, 13, 19, 25, 31],
+        [2, 8, 14, 20, 26],
+        [8, 14, 20, 26, 32],
+        [3, 9, 15, 21, 27],
+        [9, 15, 21, 27, 33],
+        [4, 10, 16, 22, 28],
+        [10, 16, 22, 28, 34],
+        [5, 11, 17, 23, 29],
+        [11, 17, 23, 29, 35],
+
+        // Diagonals
+        [0, 7, 14, 21, 28],
+        [1, 8, 15, 22, 29],
+        [6, 13, 20, 27, 34],
+        [7, 14, 21, 28, 35],
+        [5, 10, 15, 20, 25],
+        [4, 9, 14, 19, 24],
+        [11, 16, 21, 26, 31],
+        [10, 15, 20, 25, 30],
     ];
 
-    for (let combo of winningCombinations) {
-        const [a, b, c] = combo;
-        if (board[a] && board[a] === board[b] && board[a] === board[c]) {
-            return board[a]; // Return 'X' or 'O'
+    for (const condition of winConditions) {
+        const [a, b, c, d, e] = condition;
+        if (board[a] && board[a] === board[b] && board[a] === board[c] && board[a] === board[d] && board[a] === board[e]) {
+            return board[a];
         }
     }
-    return board.includes(null) ? null : 'Draw'; // Return 'Draw' if no spaces left
-};
+
+    return null;
+}
+
 
 io.on('connection', (socket) => {
     console.log('User connected:', socket.id);
